@@ -51,7 +51,7 @@ def send_all():
     # To make testing easier this is not stored at module level.
     EMAIL_BACKEND = getattr(settings, "MAILER_EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend")
     
-    lock = FileLock("send_mail")
+    lock = FileLock(getattr(settings, "MAILER_SEND_MAIL_LOCK", "send_mail"))
     
     logging.debug("acquiring lock...")
     try:
