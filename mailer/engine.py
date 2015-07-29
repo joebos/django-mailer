@@ -77,7 +77,7 @@ def send_all():
                 if connection is None:
                     connection = get_connection(backend=EMAIL_BACKEND)
                 logging.info("sending message '%s' to %s" % (message.subject.encode("utf-8"), u", ".join(message.to_addresses).encode("utf-8")))
-                if message.subject.encode("utf-8").find("edit-tweet_tweet_text_not_changed") > 0:
+                if message.subject.encode("utf-8").find("edit-tweet_tweet_text_not_changed") > 0 or message.subject.encode("utf-8").find("edit-tweet_tweet_ERROR_event") > 0:
                     print "skipped"
                 else:
                     email = message.email
