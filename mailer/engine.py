@@ -84,8 +84,10 @@ def send_all():
                     email.connection = connection
                     email.send()
                     MessageLog.objects.log(message, 1) # @@@ avoid using literal result code
-                    message.delete()
                     sent += 1
+
+                message.delete()
+
             except (socket_error, smtplib.SMTPSenderRefused, smtplib.SMTPRecipientsRefused, smtplib.SMTPAuthenticationError) as err:
                 message.defer()
                 logging.info("message deferred due to failure: %s" % err)
