@@ -77,12 +77,15 @@ def send_all():
                 if connection is None:
                     connection = get_connection(backend=EMAIL_BACKEND)
                 logging.info("sending message '%s' to %s" % (message.subject.encode("utf-8"), u", ".join(message.to_addresses).encode("utf-8")))
-                email = message.email
-                email.connection = connection
-                email.send()
-                MessageLog.objects.log(message, 1) # @@@ avoid using literal result code
-                message.delete()
-                sent += 1
+                if message.subject.encode("utf-8").find("edit-tweet_tweet_text_not_changed") > 0:
+                    print "skipped"
+                else:
+                    email = message.email
+                    email.connection = connection
+                    email.send()
+                    MessageLog.objects.log(message, 1) # @@@ avoid using literal result code
+                    message.delete()
+                    sent += 1
             except (socket_error, smtplib.SMTPSenderRefused, smtplib.SMTPRecipientsRefused, smtplib.SMTPAuthenticationError) as err:
                 message.defer()
                 logging.info("message deferred due to failure: %s" % err)
